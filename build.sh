@@ -13,7 +13,7 @@ LATEST_RELEASE="5.2"
 ISO_BASENAME="CorePure64"
 
 ISO_URL="http://www.tinycorelinux.net/5.x/x86_64/release/$ISO_BASENAME-$LATEST_RELEASE.iso"
-ISO_FILE="tmp/$ISO_BASENAME-$LATEST_RELEASE.iso"
+ISO_FILE="tmp/CorePure64-$LATEST_RELEASE.iso"
 
 
 # download

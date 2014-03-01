@@ -54,7 +54,7 @@
   "post-processors": [
     {
       "type": "vagrant",
-      "include": ["tmp/CorePure64-5.2.iso"],
+      "include": ["CoreCustom64-5.2.iso"],
       "vagrantfile_template": "template/Vagrantfile",
       "output": "{{user `BOX_NAME`}}_{{.Provider}}.box"
     }

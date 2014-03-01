@@ -1,4 +1,4 @@
-ISO_FILE = "CorePure64-5.2.iso"
+ISO_FILE = "CoreCustom64-5.2.iso"
 
 Vagrant.configure("2") do |config|
   config.ssh.shell = "sh -l"
