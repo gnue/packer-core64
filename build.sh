@@ -27,6 +27,9 @@ ISO_CHECKSUM=$(cat "$ISO_FILE.md5.txt" | cut -f 1 -d ' ')
 
 [ $(md5 -q "$ISO_FILE") == "$ISO_CHECKSUM" ] || die "ERR: invalid checksum"
 
+# vagrant_keys
+VARGRANT_KEYS="files/local/vagrant_keys"
+[ -f "$VARGRANT_KEYS" ] || curl -o "$VARGRANT_KEYS" https://raw.github.com/mitchellh/vagrant/master/keys/vagrant.pub
 
 # build
 rm -f *.box

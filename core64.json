@@ -18,21 +18,20 @@
 
       "boot_command": [
         "<wait><enter><wait>",
-        "<wait><wait><wait><wait><wait><wait>",
+        "<wait5>",
 
-        "cat << EOF > boot.sh<enter>",
+        "cat << EOF > /tmp/boot.sh<enter>",
         "#!/bin/sh<enter>",
         "set -e<enter>",
         "set -x<enter>",
         "tce-load -wi openssh<enter>",
         "sudo cp /usr/local/etc/ssh/sshd_config_example /usr/local/etc/ssh/sshd_config<enter>",
         "sudo mkdir -p /usr/local/var/ssh<enter>",
-        "sudo ln -s /usr/local/var/ssh /var/ssh<enter>",
         "sudo /usr/local/etc/init.d/openssh start<enter>",
         "echo 'tc:vagrant' | sudo chpasswd<enter>",
         "EOF<enter>",
 
-        "sh boot.sh<enter>"
+        "sh /tmp/boot.sh<enter>"
       ],
 
       "boot_wait": "3s",
@@ -47,10 +46,26 @@
       ]
     }
   ],
-  "provisioners": [{
-    "type": "shell",
-    "inline": ["mkfs.ext4 -F -L tinycorelinux-data /dev/sda"]
-  }],
+  "provisioners": [
+    {
+      "type": "shell",
+      "scripts": [
+        "scripts/mkfs.sh",
+        "scripts/copy.sh"
+      ]
+    },
+    {
+      "type": "file",
+      "source": "files/local/",
+      "destination": "/mnt/sda/home/tc/.local"
+    },
+    {
+      "type": "shell",
+      "scripts": [
+        "scripts/ssh.sh"
+      ]
+    }
+  ],
   "post-processors": [
     {
       "type": "vagrant",
