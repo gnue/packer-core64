@@ -1,0 +1,10 @@
+#/bin/sh
+
+# remove execute files from HOME
+/opt/shutdown.sh
+
+# backup files
+/usr/bin/filetool.sh -b
+
+# poweroff
+/sbin/poweroff
