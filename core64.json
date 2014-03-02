@@ -26,7 +26,6 @@
         "set -x<enter>",
         "tce-load -wi openssh<enter>",
         "sudo cp /usr/local/etc/ssh/sshd_config_example /usr/local/etc/ssh/sshd_config<enter>",
-        "sudo mkdir -p /usr/local/var/ssh<enter>",
         "sudo /usr/local/etc/init.d/openssh start<enter>",
         "echo 'tc:vagrant' | sudo chpasswd<enter>",
         "EOF<enter>",

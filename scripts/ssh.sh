@@ -16,7 +16,6 @@ chown -R tc:staff "$DIR/.ssh"
 # .filetool.lst
 cat >> "$OPT/.filetool.lst" << EOF
 usr/local/etc/ssh
-usr/local/var/ssh
 EOF
 
 # bootlocal.sh
@@ -26,8 +25,6 @@ cat >> "$OPT/bootlocal.sh" << EOF
 if [ ! -f /usr/local/etc/ssh/sshd_config ]; then
   cp /usr/local/etc/ssh/sshd_config_example /usr/local/etc/ssh/sshd_config
 fi
-
-[ -d /usr/local/var/ssh ] || mkdir -p /usr/local/var/ssh
 
 /usr/local/etc/init.d/openssh start
 EOF
