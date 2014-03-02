@@ -16,6 +16,7 @@ chown -R tc:staff "$DIR/.ssh"
 # .filetool.lst
 cat >> "$OPT/.filetool.lst" << EOF
 usr/local/etc/ssh
+var/ssh
 EOF
 
 # bootlocal.sh
