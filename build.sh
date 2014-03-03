@@ -31,6 +31,20 @@ ISO_CHECKSUM=$(cat "$ISO_FILE.md5.txt" | cut -f 1 -d ' ')
 VARGRANT_KEYS="files/local/vagrant_keys"
 [ -f "$VARGRANT_KEYS" ] || curl -o "$VARGRANT_KEYS" https://raw.github.com/mitchellh/vagrant/master/keys/vagrant.pub
 
+# squashfs
+SQUASHFS_DIR="files/squashfs"
+
+rm -rf "$SQUASHFS_DIR"
+mkdir "$SQUASHFS_DIR"
+
+for fs in squashfs/*
+do
+  if [ -d "$fs" ]; then
+    pkgname=$(basename "$fs")
+    mksquashfs "$fs" "$SQUASHFS_DIR/$pkgname.tcz" -all-root
+  fi
+done
+
 # build
 rm -f *.box
 

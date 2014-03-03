@@ -59,6 +59,11 @@
       "destination": "/mnt/sda/home/tc/.local"
     },
     {
+      "type": "file",
+      "source": "files/squashfs/",
+      "destination": "/mnt/sda/tce/optional"
+    },
+    {
       "type": "shell",
       "scripts": [
         "scripts/shutdown.sh",
