@@ -7,6 +7,10 @@ die() {
 
 set -e
 
+
+DEVICE="sda"
+MOUNT_POINT="/mnt/$DEVICE"
+
 # http://www.tinycorelinux.net/ports.html
 
 LATEST_RELEASE="5.2"
@@ -52,6 +56,8 @@ packer build \
   -var "ISO_URL=$ISO_URL" \
   -var "ISO_CHECKSUM=$ISO_CHECKSUM" \
   -var "ISO_FILE=$ISO_FILE" \
+  -var "DEVICE=$DEVICE" \
+  -var "MOUNT_POINT=$MOUNT_POINT" \
   core64.json
 
 vagrant box remove core64 || true

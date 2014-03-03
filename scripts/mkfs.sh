@@ -3,9 +3,13 @@
 set -e
 set -x
 
+DEVICE=${DEVICE:-"sda1"}
+DEV="/dev/$DEVICE"
+MNT=${MOUNT_POINT:-"/mnt/$DEVICE"}
+
 # mkfs
-mkfs.ext4 -F -L coreos-data /dev/sda
+mkfs.ext4 -F -L coreos-data "$DEV"
 
 # mount
-mkdir -p /mnt/sda
-sudo mount /dev/sda /mnt/sda
+mkdir -p "$MNT"
+sudo mount "$DEV" "$MNT"

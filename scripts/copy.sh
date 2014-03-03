@@ -3,7 +3,7 @@
 set -e
 set -x
 
-MNT="/mnt/sda"
+MNT=${MOUNT_POINT:-"/mnt/sda1"}
 OPT="$MNT/opt"
 
 sudo cp -a /home "$MNT"
