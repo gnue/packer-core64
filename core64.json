@@ -70,7 +70,7 @@
       "type": "shell",
       "environment_vars": [ "MOUNT_POINT={{user `MOUNT_POINT`}}" ],
       "scripts": [
-        "scripts/shutdown.sh",
+        "scripts/tce.sh",
         "scripts/ssh.sh"
       ]
     }
