@@ -1,0 +1,6 @@
+#!/bin/sh
+
+/sbin/depmod -a
+
+/sbin/modprobe vboxguest
+/sbin/modprobe vboxsf
