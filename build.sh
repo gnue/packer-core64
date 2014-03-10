@@ -19,7 +19,6 @@ ISO_BASENAME="CorePure64"
 ISO_URL="http://www.tinycorelinux.net/5.x/x86_64/release/$ISO_BASENAME-$LATEST_RELEASE.iso"
 ISO_FILE="tmp/CorePure64-$LATEST_RELEASE.iso"
 
-
 # download
 if [ ! -f "$ISO_FILE" ]; then
   curl -o "$ISO_FILE.md5.txt" "$ISO_URL.md5.txt"
@@ -48,6 +47,7 @@ do
     mksquashfs "$fs" "$SQUASHFS_DIR/$pkgname.tcz" -all-root
   elif [[ "$fs" =~ \.tcz$ ]]; then
     cp "$fs" "$SQUASHFS_DIR"
+    [ -f "$fs.md5.txt" ] && cp "$fs.md5.txt" "$SQUASHFS_DIR"
   fi
 done
 
