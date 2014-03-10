@@ -1,9 +1,28 @@
 #!/bin/bash
 
 die() {
-	echo "$1" 1>&2
-	exit 1
+  echo "$1" 1>&2
+  exit 1
 }
+
+# create .md5.txt
+md5txt() {
+  local path="$1"
+  local fname=$(basename "$path")
+  local curr=$(pwd)
+
+  cd $(dirname "$path")
+  md5sum "$fname" > "$fname.md5.txt"
+  cd "$curr"
+}
+
+# for OS X
+if [[ -z "$(which md5sum)" && -n "$(which md5)" ]]; then
+  md5sum() {
+    md5 -r "$@"
+  }
+fi
+
 
 set -e
 
@@ -45,6 +64,7 @@ do
   if [ -d "$fs" ]; then
     pkgname=$(basename "$fs")
     mksquashfs "$fs" "$SQUASHFS_DIR/$pkgname.tcz" -all-root
+    md5txt "$SQUASHFS_DIR/$pkgname.tcz"
   elif [[ "$fs" =~ \.tcz$ ]]; then
     cp "$fs" "$SQUASHFS_DIR"
     [ -f "$fs.md5.txt" ] && cp "$fs.md5.txt" "$SQUASHFS_DIR"
