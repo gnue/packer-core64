@@ -46,6 +46,8 @@ do
   if [ -d "$fs" ]; then
     pkgname=$(basename "$fs")
     mksquashfs "$fs" "$SQUASHFS_DIR/$pkgname.tcz" -all-root
+  elif [[ "$fs" =~ \.tcz$ ]]; then
+    cp "$fs" "$SQUASHFS_DIR"
   fi
 done
 
