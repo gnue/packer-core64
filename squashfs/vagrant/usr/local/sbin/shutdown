@@ -1,5 +1,12 @@
 #/bin/sh
 
+die() {
+  echo "$1" 1>&2
+  exit 1
+}
+
+[[ $(whoami) == "root" ]] || die "$(basename $0): NOT super-user"
+
 # remove execute files from HOME
 /opt/shutdown.sh
 
