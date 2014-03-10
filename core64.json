@@ -26,6 +26,12 @@
         "#!/bin/sh<enter>",
         "set -e<enter>",
         "set -x<enter>",
+
+        "sudo fdisk /dev/sda << INPUT <enter>",
+        "n<enter>p<enter>1<enter><enter><enter>",
+        "t<enter>83<enter>w<enter>",
+        "INPUT<enter>",
+
         "tce-load -wi openssh<enter>",
         "sudo cp /usr/local/etc/ssh/sshd_config_example /usr/local/etc/ssh/sshd_config<enter>",
         "sudo /usr/local/etc/init.d/openssh start<enter>",

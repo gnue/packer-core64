@@ -27,7 +27,7 @@ fi
 set -e
 
 
-DEVICE="sda"
+DEVICE="sda1"
 MOUNT_POINT="/mnt/$DEVICE"
 
 # http://www.tinycorelinux.net/ports.html
