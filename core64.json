@@ -3,9 +3,9 @@
     "ISO_URL":        "{{env `ISO_URL`}}",
     "ISO_CHECKSUM":   "{{env `ISO_CHECKSUM`}}",
     "ISO_FILE":       "{{env `ISO_FILE`}}",
+    "BOX_FILE":       "{{env `BOX_FILE`}}",
     "DEVICE":         "{{env `DEVICE`}}",
     "MOUNT_POINT":    "{{env `MOUNT_POINT`}}",
-    "BOX_NAME":       "core64",
     "MEMORY":         "256",
     "CPUS":           "1"
   },
@@ -92,7 +92,7 @@
       "type": "vagrant",
       "include": ["CoreCustom64-5.2.iso"],
       "vagrantfile_template": "template/Vagrantfile",
-      "output": "{{user `BOX_NAME`}}_{{.Provider}}.box"
+      "output": "{{user `BOX_FILE`}}"
     }
   ]
 }

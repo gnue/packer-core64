@@ -1,8 +1,9 @@
 .DS_Store
 packer_cache
-*.box
+cache
+build
 *.iso
+*.iso.*
 files/**/*.tcz
-files/**/*.tcz.md5.txt
-tmp
+files/**/*.tcz.*
 files/**/vagrant_keys

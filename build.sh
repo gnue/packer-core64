@@ -1,5 +1,36 @@
 #!/bin/bash
 
+set -e
+
+# read .env
+DOT_ENV="$(dirname $0)/.env"
+[ -f "$DOT_ENV" ] && source "$DOT_ENV"
+
+# environment
+PACKER_ISO_URL="$CORE64_PACKER_ISO_URL"
+ISO_NAME="$CORE64_ISO"
+BOX_FILE="$CORE64_BOX_FILE"
+BOX_NAME="$CORE64_BOX_NAME"
+DEVICE=${CORE64_DEVICE:-"sda1"}
+PROVIDER=${CORE64_PROVIDER:-"virtualbox"}
+BUILD_PATH=${BUILD_PATH:-"build"}
+CACHE_PATH=${CACHE_PATH:-"cache"}
+
+echo "$(basename $0)..."
+echo
+echo "  PACKER_ISO_URL    = $PACKER_ISO_URL"
+echo "  ISO_NAME          = $ISO_NAME"
+echo "  BOX_NAME          = $BOX_NAME"
+echo "  DEVICE            = $DEVICE"
+echo "  PROVIDER          = $PROVIDER"
+echo
+echo "  BUILD_PATH        = $BUILD_PATH"
+echo "  CACHE_PATH        = $CACHE_PATH"
+echo
+echo "  VARGRANT_KEYS_URL = $VARGRANT_KEYS_URL"
+echo
+
+
 die() {
   echo "$1" 1>&2
   exit 1
@@ -24,34 +55,27 @@ if [[ -z "$(which md5sum)" && -n "$(which md5)" ]]; then
 fi
 
 
-set -e
-
-
-DEVICE="sda1"
 MOUNT_POINT="/mnt/$DEVICE"
 
-# http://www.tinycorelinux.net/ports.html
+PACKER_ISO_CHECKSUM_URL="$PACKER_ISO_URL.md5.txt"
+PACKER_ISO_CHECKSUM_FILE="$CACHE_PATH/$(basename $PACKER_ISO_CHECKSUM_URL)"
+ISO_FILE="$ISO_NAME"
+BOX_FILE="$BUILD_PATH/$(basename $BOX_NAME)_$PROVIDER.box"
 
-LATEST_RELEASE="5.2"
-ISO_BASENAME="CorePure64"
-
-ISO_URL="http://www.tinycorelinux.net/5.x/x86_64/release/$ISO_BASENAME-$LATEST_RELEASE.iso"
-ISO_FILE="tmp/CorePure64-$LATEST_RELEASE.iso"
 
 # download
-if [ ! -f "$ISO_FILE" ]; then
-  curl -o "$ISO_FILE.md5.txt" "$ISO_URL.md5.txt"
-  curl -o "$ISO_FILE" "$ISO_URL"
-fi
+[ -f "$PACKER_ISO_CHECKSUM_FILE" ] || curl -o "$PACKER_ISO_CHECKSUM_FILE" "$PACKER_ISO_CHECKSUM_URL"
+[ -f "$ISO_FILE" ] || die "ERR: not found '$ISO_FILE'"
 
 # checksum
+PACKER_ISO_CHECKSUM=$(cat "$PACKER_ISO_CHECKSUM_FILE" | cut -f 1 -d ' ')
 ISO_CHECKSUM=$(cat "$ISO_FILE.md5.txt" | cut -f 1 -d ' ')
 
-[ $(md5 -q "$ISO_FILE") == "$ISO_CHECKSUM" ] || die "ERR: invalid checksum"
+[ $(md5 -q "$ISO_FILE") == "$ISO_CHECKSUM" ] || die "ERR: invalid checksum '$ISO_FILE'"
 
 # vagrant_keys
 VARGRANT_KEYS="files/local/vagrant_keys"
-[ -f "$VARGRANT_KEYS" ] || curl -o "$VARGRANT_KEYS" https://raw.github.com/mitchellh/vagrant/master/keys/vagrant.pub
+[ -f "$VARGRANT_KEYS" ] || curl -o "$VARGRANT_KEYS" "$VARGRANT_KEYS_URL"
 
 # squashfs
 SQUASHFS_DIR="files/squashfs"
@@ -72,15 +96,20 @@ do
 done
 
 # build
-rm -f *.box
+rm -f "$BOX_FILE"
 
 packer build \
-  -var "ISO_URL=$ISO_URL" \
-  -var "ISO_CHECKSUM=$ISO_CHECKSUM" \
+  -var "ISO_URL=$PACKER_ISO_URL" \
+  -var "ISO_CHECKSUM=$PACKER_ISO_CHECKSUM" \
   -var "ISO_FILE=$ISO_FILE" \
+  -var "BOX_FILE=$BOX_FILE" \
   -var "DEVICE=$DEVICE" \
   -var "MOUNT_POINT=$MOUNT_POINT" \
   core64.json
 
-vagrant box remove core64 || true
-vagrant box add core64 core64_virtualbox.box
+vagrant box remove "$BOX_NAME" || true
+vagrant box add "$BOX_NAME" "$BOX_FILE"
+
+# done
+echo
+echo "==> $BOX_FILE"
