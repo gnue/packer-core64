@@ -64,11 +64,6 @@
     },
     {
       "type": "file",
-      "source": "files/local/",
-      "destination": "{{user `MOUNT_POINT`}}/home/tc/.local"
-    },
-    {
-      "type": "file",
       "source": "files/squashfs/",
       "destination": "{{user `MOUNT_POINT`}}/tce/optional"
     },

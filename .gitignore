@@ -6,4 +6,4 @@ build
 *.iso.*
 files/**/*.tcz
 files/**/*.tcz.*
-files/**/vagrant_keys
+squashfs/**/vagrant_keys

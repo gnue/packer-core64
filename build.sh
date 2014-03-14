@@ -74,7 +74,8 @@ ISO_CHECKSUM=$(cat "$ISO_FILE.md5.txt" | cut -f 1 -d ' ')
 [ $(md5 -q "$ISO_FILE") == "$ISO_CHECKSUM" ] || die "ERR: invalid checksum '$ISO_FILE'"
 
 # vagrant_keys
-VARGRANT_KEYS="files/local/vagrant_keys"
+VARGRANT_KEYS="squashfs/vagrant/usr/local/share/vagrant/vagrant_keys"
+mkdir -p $(dirname "$VARGRANT_KEYS")
 [ -f "$VARGRANT_KEYS" ] || curl -o "$VARGRANT_KEYS" "$VARGRANT_KEYS_URL"
 
 # squashfs

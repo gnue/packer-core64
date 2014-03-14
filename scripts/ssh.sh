@@ -4,14 +4,7 @@ MNT=${MOUNT_POINT:-"/mnt/sda1"}
 DIR="$MNT/home/tc"
 OPT="$MNT/opt"
 
-# ssh
-mkdir -p "$DIR/.ssh"
-chmod 700 "$DIR/.ssh"
-
-cat "$DIR/.local/vagrant_keys" >> "$DIR/.ssh/authorized_keys"
-chmod 0600 "$DIR/.ssh/authorized_keys"
-
-chown -R tc:staff "$DIR/.ssh"
+# sshd
 
 # .filetool.lst
 cat >> "$OPT/.filetool.lst" << EOF
