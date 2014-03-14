@@ -2,5 +2,7 @@
 packer_cache
 *.box
 *.iso
+files/**/*.tcz
+files/**/*.tcz.md5.txt
 tmp
 files/**/vagrant_keys

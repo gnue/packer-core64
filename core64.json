@@ -3,6 +3,8 @@
     "ISO_URL":        "{{env `ISO_URL`}}",
     "ISO_CHECKSUM":   "{{env `ISO_CHECKSUM`}}",
     "ISO_FILE":       "{{env `ISO_FILE`}}",
+    "DEVICE":         "{{env `DEVICE`}}",
+    "MOUNT_POINT":    "{{env `MOUNT_POINT`}}",
     "BOX_NAME":       "core64",
     "MEMORY":         "256",
     "CPUS":           "1"
@@ -48,6 +50,7 @@
   "provisioners": [
     {
       "type": "shell",
+      "environment_vars": [ "DEVICE={{user `DEVICE`}}", "MOUNT_POINT={{user `MOUNT_POINT`}}" ],
       "scripts": [
         "scripts/mkfs.sh",
         "scripts/copy.sh"
@@ -56,11 +59,18 @@
     {
       "type": "file",
       "source": "files/local/",
-      "destination": "/mnt/sda/home/tc/.local"
+      "destination": "{{user `MOUNT_POINT`}}/home/tc/.local"
+    },
+    {
+      "type": "file",
+      "source": "files/squashfs/",
+      "destination": "{{user `MOUNT_POINT`}}/tce/optional"
     },
     {
       "type": "shell",
+      "environment_vars": [ "MOUNT_POINT={{user `MOUNT_POINT`}}" ],
       "scripts": [
+        "scripts/tce.sh",
         "scripts/ssh.sh"
       ]
     }

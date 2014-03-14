@@ -1,6 +1,6 @@
 #!/bin/sh
 
-MNT="/mnt/sda"
+MNT=${MOUNT_POINT:-"/mnt/sda1"}
 DIR="$MNT/home/tc"
 OPT="$MNT/opt"
 
