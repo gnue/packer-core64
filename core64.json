@@ -1,0 +1,76 @@
+{
+  "variables": {
+    "ISO_URL":        "{{env `ISO_URL`}}",
+    "ISO_CHECKSUM":   "{{env `ISO_CHECKSUM`}}",
+    "ISO_FILE":       "{{env `ISO_FILE`}}",
+    "BOX_NAME":       "core64",
+    "MEMORY":         "256",
+    "CPUS":           "1"
+  },
+  "builders": [
+    {
+      "type": "virtualbox-iso",
+      "guest_os_type": "Linux26_64",
+      "iso_url": "{{user `ISO_URL`}}",
+      "iso_checksum": "{{user `ISO_CHECKSUM`}}",
+      "iso_checksum_type": "md5",
+      "hard_drive_interface": "sata",
+
+      "boot_command": [
+        "<wait><enter><wait>",
+        "<wait5>",
+
+        "cat << EOF > /tmp/boot.sh<enter>",
+        "#!/bin/sh<enter>",
+        "set -e<enter>",
+        "set -x<enter>",
+        "tce-load -wi openssh<enter>",
+        "sudo cp /usr/local/etc/ssh/sshd_config_example /usr/local/etc/ssh/sshd_config<enter>",
+        "sudo /usr/local/etc/init.d/openssh start<enter>",
+        "echo 'tc:vagrant' | sudo chpasswd<enter>",
+        "EOF<enter>",
+
+        "sh /tmp/boot.sh<enter>"
+      ],
+
+      "boot_wait": "3s",
+      "guest_additions_mode": "disable",
+      "ssh_username": "tc",
+      "ssh_password": "vagrant",
+      "shutdown_command": "sudo poweroff",
+
+      "vboxmanage": [
+        [ "modifyvm", "{{.Name}}", "--memory", "{{user `MEMORY`}}" ],
+        [ "modifyvm", "{{.Name}}", "--cpus",   "{{user `CPUS`}}" ]
+      ]
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "scripts": [
+        "scripts/mkfs.sh",
+        "scripts/copy.sh"
+      ]
+    },
+    {
+      "type": "file",
+      "source": "files/local/",
+      "destination": "/mnt/sda/home/tc/.local"
+    },
+    {
+      "type": "shell",
+      "scripts": [
+        "scripts/ssh.sh"
+      ]
+    }
+  ],
+  "post-processors": [
+    {
+      "type": "vagrant",
+      "include": ["CoreCustom64-5.2.iso"],
+      "vagrantfile_template": "template/Vagrantfile",
+      "output": "{{user `BOX_NAME`}}_{{.Provider}}.box"
+    }
+  ]
+}
