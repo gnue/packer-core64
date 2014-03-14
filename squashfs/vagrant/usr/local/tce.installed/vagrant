@@ -1,0 +1,43 @@
+#!/bin/sh
+
+VAGRANT_KEYS="/usr/local/share/vagrant/vagrant_keys"
+TCUSER=$(cat /etc/sysconfig/tcuser)
+
+# register vagrant keys
+register_vagrant_keys() {
+  local dir="$1"
+  local authorized_keys="$dir/.ssh/authorized_keys"
+  local has_keys=
+
+  [ -f "$authorized_keys" ] && has_keys=$(grep "vagrant insecure public key" "$authorized_keys")
+  [ -n "$has_keys" ] && return
+
+  local own=$(ls -ld "$dir" | awk '{ print $3 ":" $4 }')
+
+  mkdir -p "$dir/.ssh"
+  chmod 700 "$dir/.ssh"
+  chown "$own" "$dir/.ssh"
+
+  cat "$VAGRANT_KEYS" >> "$authorized_keys"
+  chmod 0600 "$authorized_keys"
+  chown "$own" "$authorized_keys"
+}
+
+# home dir
+home_dir() {
+  local user="$1"
+  awk -F ':' "/^$user/ { print \$6 }" /etc/passwd
+}
+
+
+# ssh keys
+register_vagrant_keys $(home_dir "$TCUSER")
+
+for homedir in $(ls -d /home/*)
+do
+  [ -f "$homedir/.vagrant" ] && register_vagrant_keys "$homedir"
+done
+
+
+# shared folder
+mkdir -p /vagrant
