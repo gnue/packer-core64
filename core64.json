@@ -69,6 +69,12 @@
     {
       "type": "shell",
       "environment_vars": [ "MOUNT_POINT={{user `MOUNT_POINT`}}" ],
+      "only": ["virtualbox-iso"],
+      "scripts": [ "scripts/virtualbox.sh" ]
+    },
+    {
+      "type": "shell",
+      "environment_vars": [ "MOUNT_POINT={{user `MOUNT_POINT`}}" ],
       "scripts": [
         "scripts/tce.sh",
         "scripts/ssh.sh"
