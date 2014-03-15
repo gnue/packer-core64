@@ -43,13 +43,10 @@ die() {
 
 # create .md5.txt
 md5txt() {
-  local path="$1"
-  local fname=$(basename "$path")
-  local curr=$(pwd)
+  local dir=$(dirname "$1")
+  local fname=$(basename "$1")
 
-  cd $(dirname "$path")
-  md5sum "$fname" > "$fname.md5.txt"
-  cd "$curr"
+  ( cd "$dir"; md5sum "$fname" > "$fname.md5.txt" )
 }
 
 # for OS X
