@@ -1,0 +1,13 @@
+#!/bin/sh
+
+LD_SO="ld-linux-x86-64.so.2"
+
+# require
+mkdir -p /lib64
+[ -f "/lib64/$LD_SO" ] || ln -s "/lib/$LD_SO" "/lib64/$LD_SO"
+
+# modprobe
+/sbin/depmod -a
+
+/sbin/modprobe vboxguest
+/sbin/modprobe vboxsf
