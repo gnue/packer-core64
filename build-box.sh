@@ -2,9 +2,14 @@
 
 set -e
 
+WORKDIR=$(dirname "$0")
+
+
+# read config
+source "$WORKDIR/core64.conf"
+
 # read .env
-DOT_ENV="$(dirname $0)/.env"
-[ -f "$DOT_ENV" ] && source "$DOT_ENV"
+[ -f ".env" ] && source ".env"
 
 # environment
 PACKER_ISO_URL="$CORE64_PACKER_ISO_URL"
@@ -13,8 +18,8 @@ BOX_FILE="$CORE64_BOX_FILE"
 BOX_NAME="$CORE64_BOX_NAME"
 DEVICE=${CORE64_DEVICE:-"sda1"}
 PROVIDER=${CORE64_PROVIDER:-"virtualbox"}
-BUILD_PATH=${BUILD_PATH:-"build"}
-CACHE_PATH=${CACHE_PATH:-"cache"}
+BUILD_PATH=${BUILD_PATH:-"$WORKDIR/build"}
+CACHE_PATH=${CACHE_PATH:-"$WORKDIR/cache"}
 
 echo "$(basename $0)..."
 echo
@@ -38,13 +43,10 @@ die() {
 
 # create .md5.txt
 md5txt() {
-  local path="$1"
-  local fname=$(basename "$path")
-  local curr=$(pwd)
+  local dir=$(dirname "$1")
+  local fname=$(basename "$1")
 
-  cd $(dirname "$path")
-  md5sum "$fname" > "$fname.md5.txt"
-  cd "$curr"
+  ( cd "$dir"; md5sum "$fname" > "$fname.md5.txt" )
 }
 
 # for OS X

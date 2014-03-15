@@ -1,1 +1,1 @@
-3f7d5c055ee016064d66faeefad928cd  vboxadd64-3.8.13-tinycore64.tcz
+../packages/build/vboxadd64-3.8.13-tinycore64.tcz.md5.txt
